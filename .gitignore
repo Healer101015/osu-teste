@@ -1,0 +1,6 @@
+/node_modules
+/downloads
+.env
+downloaded_maps.json
+nerinyan.bat.bat
+osu.direct.bat.bat
