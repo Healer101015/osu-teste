@@ -83,10 +83,10 @@ async function searchBeatmaps(token, userMin = 4.0, userMax = 5.0, limit = 5, do
     return shuffle(beatmaps).slice(0, limit);
 }
 
-// 3️⃣ Baixar beatmap (.osz) com fallback automático
+// 3️⃣ Baixar beatmap (.osz) com Nerinyan como principal
 async function downloadBeatmap(beatmapId, title) {
-    const primaryUrl = `https://osu.direct/api/d/${beatmapId}`;
-    const fallbackUrl = `https://api.nerinyan.moe/d/${beatmapId}`;
+    const primaryUrl = `https://api.nerinyan.moe/d/${beatmapId}`;
+    const fallbackUrl = `https://osu.direct/api/d/${beatmapId}`;
     const fileName = `${title.replace(/[<>:"/\\|?*]/g, "_")}.osz`;
     const filePath = path.join(OSU_SONGS_PATH, fileName);
 
@@ -130,15 +130,15 @@ async function downloadBeatmap(beatmapId, title) {
     }
 
     try {
-        console.log(`⬇️ Baixando de osu.direct: ${title}`);
-        await tryDownload(primaryUrl, "osu.direct");
-        console.log(`✅ Download concluído: ${fileName}`);
+        console.log(`⬇️ Baixando de Nerinyan: ${title}`);
+        await tryDownload(primaryUrl, "Nerinyan");
+        console.log(`✅ Download concluído via Nerinyan: ${fileName}`);
         return true;
     } catch (err1) {
-        console.warn(`⚠️ Falha no osu.direct (${err1.message}), tentando Nerinyan...`);
+        console.warn(`⚠️ Falha no Nerinyan (${err1.message}), tentando osu.direct...`);
         try {
-            await tryDownload(fallbackUrl, "Nerinyan");
-            console.log(`✅ Download concluído via Nerinyan: ${fileName}`);
+            await tryDownload(fallbackUrl, "osu.direct");
+            console.log(`✅ Download concluído via osu.direct: ${fileName}`);
             return true;
         } catch (err2) {
             console.error(`❌ Falha ao baixar ${title} em ambas as fontes: ${err2.message}`);
@@ -180,7 +180,5 @@ async function main() {
 
     await showRecommendations(beatmaps, downloadedSet);
 }
-
-
 
 main().catch(console.error);
